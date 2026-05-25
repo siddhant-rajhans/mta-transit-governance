@@ -7,15 +7,16 @@ official MTA document.
 
 ## What this memo covers
 
-MTA has signaled in 2025-2026 that it intends to use AI more aggressively:
-camera analytics for safety, fare-evasion detection, predictive
-maintenance, AI-assisted procurement. Some of this is already in pilot
-form. Civil rights groups have pushed back on the surveillance pieces.
-The question I'm trying to answer here is what a minimal-but-real
-governance framework would look like, given the actual constraints.
+MTA is moving faster on AI in 2025 and 2026. Camera analytics for safety.
+Fare-evasion detection. Predictive maintenance. An AI assistant for
+procurement drafting. Some pieces are already in pilot. Civil rights
+groups have pushed back on the surveillance pieces, and the pushback is
+not going away.
 
-It's a one-pager. A real framework would be longer. This is the version
-I'd hand a manager who has 10 minutes before a board meeting.
+This memo is what I'd write for a manager who has ten minutes before a
+board meeting and needs a sketch of what responsible deployment would
+look like. It's not a framework. A framework would be 30 pages and need
+legal review. This is a starting point.
 
 ## The regulatory landscape, briefly
 
@@ -23,10 +24,10 @@ Federal: there is no comprehensive federal AI law. The 2023 executive
 order set direction; agency guidance has followed (NIST AI RMF 1.0 is
 the practical reference). Treat NIST as the baseline.
 
-New York State: AI accountability legislation has been proposed
-repeatedly. Some of it will pass. The contours that consistently appear
-are impact assessments, bias audits, and transparency for
-high-consequence systems.
+New York State: AI accountability bills keep getting proposed. Some
+will pass eventually. The recurring pieces are impact assessments, bias
+audits, and disclosure requirements for systems that affect employment,
+housing, or access to public services.
 
 New York City: Local Law 144 applies to automated employment decision
 tools. MTA hiring would fall under it. The deeper relevance is that the

@@ -1,12 +1,13 @@
 # MTA Transit Data Governance Dashboard
 
-A Power BI dashboard built on MTA's public ridership data, with the data
-governance documentation that usually doesn't ship with it: a data
-dictionary, a set of data quality rules, a lineage map, and a short
-policy memo on AI/ML governance for transit.
+Power BI dashboard on MTA's public ridership data, plus the governance
+docs that should come with any dataset before it's trusted: a data
+dictionary, quality rules, a lineage map, and a one-page AI/ML
+governance memo.
 
-I built this because I was applying for the MTA's Enterprise Architecture
-fellowship and wanted to show the work, not just talk about it.
+I made this while applying for MTA's Enterprise Architecture fellowship.
+The job description asks for dashboards, governance documentation, and
+policy research, so I built one of each.
 
 ## What's in here
 
