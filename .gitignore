@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+.vscode/
+.idea/
+.DS_Store
+
+# Large raw downloads stay local
+data/raw/
+
+# Power BI lock files
+*.pbix.lock
