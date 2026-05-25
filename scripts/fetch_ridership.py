@@ -12,12 +12,15 @@ from urllib.request import urlretrieve
 RAW_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "raw")
 
 DATASETS = {
+    # MTA's most-downloaded dataset. Small (~150 KB), covers all modes,
+    # daily granularity. The dashboard's main backbone.
     "daily_ridership_2020_2025.csv":
         "https://data.ny.gov/api/views/vxuj-8kew/rows.csv?accessType=DOWNLOAD",
+
+    # Subway hourly by station. Large (~300+ MB). Used for the
+    # station-level and hour-of-day views in the dashboard.
     "subway_hourly_2025.csv":
-        "https://data.ny.gov/api/views/wujg-7c2s/rows.csv?accessType=DOWNLOAD",
-    "bus_hourly_2025.csv":
-        "https://data.ny.gov/api/views/kv7t-r4xa/rows.csv?accessType=DOWNLOAD",
+        "https://data.ny.gov/api/views/5wq4-mkjj/rows.csv?accessType=DOWNLOAD",
 }
 
 

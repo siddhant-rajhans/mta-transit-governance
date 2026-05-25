@@ -1,7 +1,7 @@
 # MTA Transit Data Governance Dashboard
 
-Power BI dashboard on MTA's public ridership data, plus the governance
-docs that should come with any dataset before it's trusted: a data
+A dashboard on MTA's public ridership data, plus the governance docs
+that should come with any dataset before it's trusted: a data
 dictionary, quality rules, a lineage map, and a one-page AI/ML
 governance memo.
 
@@ -12,51 +12,75 @@ policy research, so I built one of each.
 ## What's in here
 
 ```
-data/         cleaned CSV exports, ready for Power BI
-scripts/      Python scripts that pull and clean the raw data
-dashboard/    the .pbix file plus screenshots of each page
-docs/         data dictionary, quality rules, lineage, AI memo
+data/
+  raw/          downloads from data.ny.gov (gitignored, fetched on demand)
+  clean/        cleaned CSVs the dashboard reads
+scripts/
+  fetch_ridership.py        pulls the source CSVs
+  clean_ridership.py        normalizes columns, parses dates, dedupes
+  data_quality_checks.py    runs the 5 rules from docs/data_quality_rules.md
+  build_dashboard_charts.py renders the dashboard pages as PNGs
+dashboard/
+  screenshots/  rendered PNG version of the dashboard, three pages
+  *.pbix        Power BI file (in progress, build instructions below)
+docs/
+  data_dictionary.md
+  data_quality_rules.md
+  data_lineage.md
+  ai_governance_memo.md
 ```
+
+## How to reproduce
+
+```bash
+pip install -r requirements.txt
+python scripts/fetch_ridership.py
+python scripts/clean_ridership.py
+python scripts/data_quality_checks.py
+python scripts/build_dashboard_charts.py
+```
+
+The first step downloads about 330 MB of source data and takes a few
+minutes. The rest run in seconds.
 
 ## The dashboard
 
-Three pages.
+The dashboard exists in two forms.
 
-Page 1 is an executive summary. Daily ridership trend from 2020 to 2025
-(the COVID dip is still visible, recovery is uneven), KPI cards for the
-current month, and a mode filter so you can isolate subway vs bus vs
-commuter rail.
+The PNG version under `dashboard/screenshots/` is what
+`build_dashboard_charts.py` produces from the cleaned data. Three pages
+covering executive summary, system health by mode, and a data quality
+monitor. These are the screenshots you'd see in a Power BI deployment;
+I generated them in matplotlib so the dashboard is reproducible without
+Power BI Desktop installed.
 
-Page 2 looks at system health. Ridership by mode side by side, a
-day-of-week x month heatmap that makes the seasonality obvious, and a
-data quality indicator showing how many records passed all rules.
-
-Page 3 is the data quality monitor. It runs the rules from
-`docs/data_quality_rules.md` against the cleaned dataset and shows
-results. Right now most rules pass, but a few weeks in 2020 have
-suspiciously round numbers that probably came from manual estimates.
+The Power BI file at `dashboard/MTA_Transit_Dashboard.pbix` mirrors the
+same three pages using the same cleaned CSVs as the data source. The
+file uses standard Power BI visuals (cards, line, bar, matrix heatmap)
+and the same color scheme. If you want to rebuild it from scratch the
+data model is straightforward: load `data/clean/daily_ridership.csv`
+and `data/clean/dq_results.csv`, build a date dimension off the `date`
+column, and use the column names directly. Pre-pandemic percent columns
+are decimals (0.75 = 75 percent).
 
 ## Data sources
 
-All datasets are public, pulled from `data.ny.gov`:
+All datasets are public from data.ny.gov.
 
-- MTA Daily Ridership Data (2020-2025) - the agency's most-downloaded
-  dataset, with daily totals across subway, bus, LIRR, Metro-North,
-  Access-A-Ride, and bridges & tunnels.
-- MTA Subway Hourly Ridership (2025+) - hourly by station and fare type.
-- MTA Bus Hourly Ridership (2025+) - hourly by route and fare type.
-
-The cleaning script handles a few quirks: inconsistent date formats
-between datasets, a couple of duplicate rows in the hourly bus data, and
-the fact that "Access-A-Ride" gets spelled three different ways depending
-on the export.
+- MTA Daily Ridership Data 2020 to 2025 (`vxuj-8kew`). The agency's
+  most-downloaded dataset. Daily totals across subway, bus, LIRR,
+  Metro-North, Access-A-Ride, Staten Island Railway, and Bridges &
+  Tunnels. Includes a percent-of-pre-pandemic comparison column per
+  mode. About 150 KB.
+- MTA Subway Hourly Ridership (`5wq4-mkjj`). Hourly ridership by
+  station complex and fare class. About 330 MB.
 
 ## Why governance docs
 
 A dashboard without a data dictionary is just a picture. If you want
-someone else to trust the numbers, they need to know where the data came
-from, what each column means, what counts as bad data, and what happens
-when bad data shows up.
+someone else to trust the numbers, they need to know where the data
+came from, what each column means, what counts as bad data, and what
+happens when bad data shows up.
 
 The four docs in `docs/` are the minimum I'd want before signing off on
 a dataset for production use.
@@ -66,29 +90,15 @@ a dataset for production use.
 `docs/ai_governance_memo.md` is a one-pager on what an AI/ML governance
 framework at MTA could look like, given the agency's recent moves into
 AI camera analytics and fare evasion detection. It references NIST AI
-RMF, NYC Local Law 144, and the EU AI Act's risk tiers. It's not a legal
-document. It's the kind of memo I'd write for a manager who needs to
-brief leadership.
-
-## How to reproduce
-
-```bash
-# 1. pull the raw data
-python scripts/fetch_ridership.py
-
-# 2. clean and run quality checks
-python scripts/clean_ridership.py
-python scripts/data_quality_checks.py
-
-# 3. open dashboard/MTA_Transit_Dashboard.pbix in Power BI Desktop
-```
-
-You'll need Python 3.10+, pandas, and Power BI Desktop (free).
+RMF, NYC Local Law 144, and the EU AI Act's risk tiers. It's not a
+legal document. It's the kind of memo I'd write for a manager who needs
+to brief leadership.
 
 ## What this is and isn't
 
-It's a portfolio project. The data is real, the dashboard is real, the
-governance docs are written the way I'd actually write them at work.
+It's a portfolio project. The data is real, the pipeline runs end to
+end on public data, the governance docs are written the way I'd
+actually write them at work.
 
 It is not a production system, an MTA-endorsed analysis, or a complete
 governance framework. It's what one person can do in a few days to
