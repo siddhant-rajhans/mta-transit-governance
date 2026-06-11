@@ -1,5 +1,7 @@
 # MTA Transit Data Governance Dashboard
 
+![CI](https://github.com/siddhant-rajhans/mta-transit-governance/actions/workflows/ci.yml/badge.svg)
+
 A dashboard on MTA's public ridership data, plus the governance docs
 that should come with any dataset before it's trusted: a data
 dictionary, quality rules, a lineage map, and a one-page AI/ML
@@ -8,6 +10,17 @@ governance memo.
 I made this while applying for MTA's Enterprise Architecture fellowship.
 The job description asks for dashboards, governance documentation, and
 policy research, so I built one of each.
+
+![Executive Summary](dashboard/screenshots/page1_executive_summary.png)
+
+<details>
+<summary>More dashboard pages: system health by mode, data quality monitor</summary>
+
+![System Health](dashboard/screenshots/page2_system_health.png)
+
+![Data Quality Monitor](dashboard/screenshots/page3_data_quality.png)
+
+</details>
 
 ## What's in here
 
@@ -28,7 +41,22 @@ docs/
   data_quality_rules.md
   data_lineage.md
   ai_governance_memo.md
+tests/
+  test_data_quality.py  unit tests for each DQ rule + a contract test
+                        asserting the committed clean CSV passes all rules
 ```
+
+## Tests
+
+```bash
+python -m pytest tests/ -v
+```
+
+Each data quality rule has unit tests against hand-built frames where the
+expected outcome is obvious (nulls, future dates, order-of-magnitude
+outliers, duplicate dates). A second layer treats the committed cleaned
+CSV as a contract: CI fails if a pipeline re-run ever commits data that
+breaks a rule, and rebuilds the dashboard charts as a smoke test.
 
 ## How to reproduce
 
